@@ -1,0 +1,50 @@
+<app-nav-bar></app-nav-bar>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="container-fluid">
+            <div class="panel">
+                <h1>Posts</h1>
+                <h3>Total number of posts: {{ (numPostsObject | async)?.$value || 0}}</h3>
+            </div>
+            <div class="panel">
+                <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+                    <!--<div class="form-group">-->
+                    <md-input-container>
+                        <input name="title" ngModel mdInput required placeholder="Post Title"
+                               class="form-control">
+                    </md-input-container>
+                    <textarea name="text" ngModel placeholder="Post Text" class="form-control"></textarea>
+                    <ng2-file-input><!--(onChange)="onFileChange($event)">-->
+                    </ng2-file-input>
+                    <div *ngIf="fileInputComponent.currentFiles.length > 0">
+                        <b>{{fileInputComponent.currentFiles[0].name}}</b>
+                        <button md-raised-button class="btn btn-raised btn-custom" (click)="removeImage(fileInputComponent.currentFiles[0])">Remove Image</button>
+                    </div>
+                    <button md-raised-button class="btn btn-raised btn-custom">Make New Post</button>
+                    <!--</div>-->
+                </form>
+                <b>{{submitText}}</b>
+            </div>
+            <div *ngFor="let post of postsArray | async | orderBy: 'datetime' | reverse">
+                <div class="panel">
+                    <!--For previewing data as JSON-->
+                    <!--{{post | json}}-->
+                    <h3>{{post['title']}}</h3>
+                    <img src="{{post['image-url']}}" *ngIf="post['image-url']" class="img-responsive panel">
+                    <p *ngIf="post['text']">{{post['text']}}</p>
+                    <p>Posted by {{post['poster-display-name']}} on <b>{{formatDate(post['datetime'])}}</b></p>
+                    <!--Users can only delete posts that they have made-->
+                    <button md-raised-button *ngIf="post['poster-uid'] === userUID" (click)="removePost(post)"
+                            class="btn btn-raised btn-custom">Delete Post
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="canLoadMoreData" class="panel">
+                <button md-raised-button id="load-more-posts" class="btn btn-raised btn-custom" (click)="tryToLoadMoreData()">
+                    Load More Posts
+                </button>
+            </div>
+            <h3 id="no-more-posts-text" *ngIf="!canLoadMoreData">Showing All Posts</h3>
+        </div>
+    </div>
+</div>
