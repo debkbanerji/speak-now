@@ -13,7 +13,7 @@
                         <input name="title" ngModel mdInput required placeholder="Post Title"
                                class="form-control">
                     </md-input-container>
-                    <textarea name="text" ngModel placeholder="Post Text" class="form-control"></textarea>
+                    <!--<textarea name="text" ngModel placeholder="Post Text" class="form-control"></textarea>-->
                     <ng2-file-input><!--(onChange)="onFileChange($event)">-->
                     </ng2-file-input>
                     <div *ngIf="fileInputComponent.currentFiles.length > 0">
@@ -23,6 +23,8 @@
                     <button md-raised-button class="btn btn-raised btn-custom">Make New Post</button>
                     <!--</div>-->
                 </form>
+                <button md-raised-button class="btn btn-raised btn-custom" (click)="startRecoding()">Start Recording</button>
+                <button md-raised-button class="btn btn-raised btn-custom" (click)="finishRecording()">Stop Recording</button>
                 <b>{{submitText}}</b>
             </div>
             <div *ngFor="let post of postsArray | async | orderBy: 'datetime' | reverse">
@@ -31,6 +33,10 @@
                     <!--{{post | json}}-->
                     <h3>{{post['title']}}</h3>
                     <img src="{{post['image-url']}}" *ngIf="post['image-url']" class="img-responsive panel">
+                    <audio controls *ngIf="post['audio-url']">
+                        <source src="{{post['audio-url']}}" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
                     <p *ngIf="post['text']">{{post['text']}}</p>
                     <p>Posted by {{post['poster-display-name']}} on <b>{{formatDate(post['datetime'])}}</b></p>
                     <!--Users can only delete posts that they have made-->
