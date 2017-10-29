@@ -130,13 +130,6 @@ export class PostsComponent implements OnInit, OnDestroy {
         const minutes = Math.floor(timeDifference / 60);
         const seconds = timeDifference - minutes * 60;
         this.recordingTimeText = '' + minutes + ':' + (seconds < 10 ? '0' : '') + '' + seconds;
-        // if (timeDifference < 60) {
-        //     this.recordingTimeText = '' + timeDifference + ' Seconds';
-        // } else {
-        //     const minutes = Math.floor(timeDifference / (60 * 1000));
-        //     const seconds = timeDifference - minutes * 60;
-        //     this.recordingTimeText = '' + Math.trunc(timeDifference / 1000) + ' Seconds';
-        // }
         this.isRecording = false;
     }
 
@@ -180,13 +173,14 @@ export class PostsComponent implements OnInit, OnDestroy {
                     'title': form.value.title,
                     // 'text': form.value.text,
                     'audio-url': audioURL,
+                    // 'audio-text': component.recordingTimeText,
                     'poster-display-name': component.userDisplayName,
                     'poster-uid': component.userUID,
                     'datetime': timestamp
                 };
 
                 if (component.fileInputComponent.currentFiles.length > 0) {
-                    const image = this.fileInputComponent.currentFiles[0]; // Input is limited to one file - can be changed in view
+                    const image = component.fileInputComponent.currentFiles[0]; // Input is limited to one file - can be changed in view
                     const imageRef = firebase.storage().ref().child('/users/' + component.userUID + '/' + timestamp);
                     // Unique path as one user cannot upload multiple files at the exact same time
 
@@ -197,7 +191,6 @@ export class PostsComponent implements OnInit, OnDestroy {
                         post['image-url'] = imageSnapshot.downloadURL;
                         component.postsArray.push(post);
                         component.onPostSuccess(form);
-                        component.isLoading = false;
                     }).catch(function (error) {
                         console.log(error);
                     });
@@ -205,7 +198,6 @@ export class PostsComponent implements OnInit, OnDestroy {
                     // Push without uploading image
                     component.postsArray.push(post);
                     component.onPostSuccess(form);
-                    component.isLoading = false;
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -223,6 +215,10 @@ export class PostsComponent implements OnInit, OnDestroy {
         });
         form.resetForm();
         this.submitText = 'Successfully made post';
+        this.isLoading = false;
+        this.recordingStartTime = null;
+        this.recordingTimeText = null;
+        audioBlob = null;
     }
 
     private removeImage(file) {

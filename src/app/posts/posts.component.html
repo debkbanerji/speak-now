@@ -9,34 +9,39 @@
             <div class="panel" [hidden]="!isLoading">
                 <h2>Uploading...</h2>
             </div>
-            <div class="panel" [hidden]="isLoading" >
-                <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+            <div class="panel" [hidden]="isLoading">
+                <form #f="ngForm" novalidate>
                     <!--<div class="form-group">-->
                     <md-input-container>
-                        <input name="title" ngModel mdInput required placeholder="Post Title"
+                        <input name="title" ngModel mdInput placeholder="Post Title"
                                class="form-control">
                     </md-input-container>
                     <!--<textarea name="text" ngModel placeholder="Post Text" class="form-control"></textarea>-->
                     <ng2-file-input><!--(onChange)="onFileChange($event)">-->
                     </ng2-file-input>
                     <div *ngIf="fileInputComponent.currentFiles.length > 0">
-                        <b>{{fileInputComponent.currentFiles[0].name}}</b>
                         <button md-raised-button class="btn btn-raised btn-custom"
                                 (click)="removeImage(fileInputComponent.currentFiles[0])">Remove Image
                         </button>
+                        <b>{{fileInputComponent.currentFiles[0].name}}</b>
                     </div>
-                    <button md-raised-button class="btn btn-raised btn-custom">Make New Post</button>
+                    <button md-raised-button class="btn btn-raised btn-custom" *ngIf="!isRecording"
+                            (click)="startRecoding()">Start Recording
+                    </button>
+                    <button md-raised-button class="btn btn-raised btn-custom" *ngIf="isRecording"
+                            (click)="finishRecording()">Stop Recording
+                    </button>
+                    <span *ngIf="isRecording" class="glyphicon glyphicon-record"></span>
+                    <br>
+                    <span *ngIf="recordingTimeText">
+                        <b>{{recordingTimeText}}</b>
+                        <br>
+                    </span>
+                    <button md-raised-button class="btn btn-raised btn-custom" (click)="onSubmit(f)"
+                            *ngIf="!isRecording">Make New Post
+                    </button>
                     <!--</div>-->
                 </form>
-                <button md-raised-button class="btn btn-raised btn-custom" *ngIf="!isRecording"
-                        (click)="startRecoding()">Start Recording
-                </button>
-                <button md-raised-button class="btn btn-raised btn-custom" *ngIf="isRecording"
-                        (click)="finishRecording()">Stop Recording
-                </button>
-                <span *ngIf="isRecording" class="glyphicon glyphicon-record"></span>
-                <br>
-                <b>{{recordingTimeText}}</b>
                 <br>
                 <b>{{submitText}}</b>
             </div>
