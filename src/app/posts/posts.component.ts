@@ -32,6 +32,10 @@ export class PostsComponent implements OnInit, OnDestroy {
     public submitText: String;
     private userDisplayName: String;
     private userUID: String;
+    public isRecording: boolean;
+    public recordingStartTime: Date;
+    public recordingTimeText: string;
+    public isLoading = false;
 
     formatDate(millis) {
         const date = new Date(millis);
@@ -113,10 +117,27 @@ export class PostsComponent implements OnInit, OnDestroy {
 
     public startRecoding() {
         audioInterface.startRecording();
+        this.recordingTimeText = null;
+        this.isRecording = true;
+        this.recordingStartTime = new Date();
     }
 
     public finishRecording() {
         audioInterface.finishRecording();
+        const currDate = new Date();
+        let timeDifference = currDate.getTime() - this.recordingStartTime.getTime();
+        timeDifference = Math.trunc(timeDifference / 1000);
+        const minutes = Math.floor(timeDifference / 60);
+        const seconds = timeDifference - minutes * 60;
+        this.recordingTimeText = '' + minutes + ':' + (seconds < 10 ? '0' : '') + '' + seconds;
+        // if (timeDifference < 60) {
+        //     this.recordingTimeText = '' + timeDifference + ' Seconds';
+        // } else {
+        //     const minutes = Math.floor(timeDifference / (60 * 1000));
+        //     const seconds = timeDifference - minutes * 60;
+        //     this.recordingTimeText = '' + Math.trunc(timeDifference / 1000) + ' Seconds';
+        // }
+        this.isRecording = false;
     }
 
     private updateCanLoadState(data) {
@@ -139,6 +160,7 @@ export class PostsComponent implements OnInit, OnDestroy {
             this.submitText = 'Please record audio';
 
         } else if (form.valid) {
+            this.isLoading = true;
             let currDate: Date;
             currDate = new Date();
             currDate.setTime(currDate.getTime() + currDate.getTimezoneOffset() * 60 * 1000); // For internationalization purposes
@@ -149,12 +171,9 @@ export class PostsComponent implements OnInit, OnDestroy {
 
             const audioRef = firebase.storage().ref().child('/users/' + this.userUID + '/' + timestamp + '.wav');
             if (audioInterface.isRecording()) {
-                audioInterface.finishRecording();
+                component.finishRecording();
             }
-            console.log(audioBlob);
             audioRef.put(audioBlob).then(function (snapshot) {
-                console.log(snapshot);
-
                 const audioURL = snapshot.downloadURL;
 
                 const post = {
@@ -178,6 +197,7 @@ export class PostsComponent implements OnInit, OnDestroy {
                         post['image-url'] = imageSnapshot.downloadURL;
                         component.postsArray.push(post);
                         component.onPostSuccess(form);
+                        component.isLoading = false;
                     }).catch(function (error) {
                         console.log(error);
                     });
@@ -185,6 +205,7 @@ export class PostsComponent implements OnInit, OnDestroy {
                     // Push without uploading image
                     component.postsArray.push(post);
                     component.onPostSuccess(form);
+                    component.isLoading = false;
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -192,7 +213,7 @@ export class PostsComponent implements OnInit, OnDestroy {
 
 
         } else {
-            this.submitText = 'Please fill out all the required data';
+            this.submitText = 'Please fill out the required data';
         }
     }
 
