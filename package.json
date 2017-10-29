@@ -2,7 +2,7 @@
     "name": "speak-now",
     "version": "0.0.0",
     "author": "Deb Banerji",
-    "description": "I am not the kind of app that could be just as cool as Facebook on every occasion, but you are not the kind of boy that should be only using cool apps.",
+    "description": "I am not the kind of app that could be just as cool as Facebook on every occasion, but you are not the kind of boy that should be using only cool apps.",
     "license": "MIT",
     "scripts": {
         "ng": "ng",

@@ -1,8 +1,15 @@
 # Speak Now
 
-"I am not the kind of app that could be just as cool as Facebook on every occasion, but you are not the kind of boy that should be only using cool apps."
+I am not the kind of app
+that could be just as cool as Facebook on every occasion
+but you are not the kind of boy
+that should be using only cool apps
+
+![Logo](src/assets/images/logo.png)
 
 Speak Now is a social network in which you communicate using your voice rather than text
+
+The name, logo and tagline were ~~stolen from~~ inspired by the Taylor Swift song and album of the same name
 
 Made with ♥ by Deb Banerji
 
