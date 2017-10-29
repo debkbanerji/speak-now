@@ -56,3 +56,17 @@
     display: inline-block;
     vertical-align: top;
 }
+
+.message-timestamp {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    padding-top: 8px;
+}
+
+.timestamp-frame {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    height: 100%;
+}

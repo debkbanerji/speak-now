@@ -89,7 +89,7 @@ export class AddFriendsComponent implements OnInit, OnDestroy {
                                 this.friendObject.set({
                                     'chat-key': chatKey,
                                     'display-name': friendData['display-name'],
-                                    'email': friendData['display-name'],
+                                    'email': friendData['email'],
                                     'last-interacted': currDate.getTime(),
                                     'uid': friendData['uid']
                                 });

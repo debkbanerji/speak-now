@@ -23,15 +23,20 @@
                     <!--{{message['text']}}-->
                     <!--</p>-->
                     <div class="panel message-panel">
-                        <span *ngIf="message['poster-uid'] === userUID" class="small-circle-profile-img"><img src="{{userPhotoURL}}"
-                                                                             class="img-circle friend-photo"></span>
-                        <span *ngIf="message['poster-uid'] !== userUID" class="small-circle-profile-img"><img src="{{friendPhotoURL}}"
-                                                                             class="img-circle friend-photo"></span>
+                        <span *ngIf="message['poster-uid'] === userUID" class="small-circle-profile-img"><img
+                            src="{{userPhotoURL}}"
+                            class="img-circle friend-photo"></span>
+                        <span *ngIf="message['poster-uid'] !== userUID" class="small-circle-profile-img"><img
+                            src="{{friendPhotoURL}}"
+                            class="img-circle friend-photo"></span>
 
                         <audio controls *ngIf="message['audio-url']">
                             <source src="{{message['audio-url']}}" type="audio/wav">
                             Your browser does not support the audio element.
                         </audio>
+                        <div class=timestamp-frame>
+                            <b class="message-timestamp">{{formatTimeStamp(message['post-time'])}}</b>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,12 +63,12 @@
                                 style="height: 46px"
                                 (click)="finishRecording()">Stop Recording
                         </button>
-                        <span *ngIf="isRecording" class="glyphicon glyphicon-record"></span>
+                        <span *ngIf="isRecording" class="glyphicon glyphicon-record" style="padding-left: 5px"></span>
                         <br>
                         <span *ngIf="recordingTimeText">
-                        <b>{{recordingTimeText}}</b>
-                        <br>
-                    </span>
+                            <b>{{recordingTimeText}}</b>
+                            <br>
+                        </span>
                         <span class="input-group-btn">
                             <button md-raised-button class="btn btn-sm btn-raised btn-custom"
                                     (click)="sendMessage(f)"><span class="glyphicon glyphicon-send"></span>

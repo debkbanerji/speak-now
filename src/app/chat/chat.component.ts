@@ -46,6 +46,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     public recordingTimeText: string;
     public isLoading = false;
 
+    formatTimeStamp(millis) {
+        const date = new Date(millis);
+        date.setTime(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+        return date.toLocaleString();
+    }
+
     constructor(public authService: AuthService, private db: AngularFireDatabase, private route: ActivatedRoute) {
     }
 
