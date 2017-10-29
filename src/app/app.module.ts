@@ -37,12 +37,14 @@ import {AddFriendsComponent} from './add-friends/add-friends.component';
 import {FriendRequestsComponent} from './friend-requests/friend-requests.component';
 import {ChatComponent} from './chat/chat.component';
 import {CdkTableModule} from '@angular/cdk';
+import {AboutComponent} from './about/about.component';
 
 const routes: Routes = [ // Array of all routes - modify when adding routes //TODO: Replace
     {path: '', component: HomePageComponent}, // Default route
     {path: 'login', component: LoginPageComponent},
     {path: 'posts', component: PostsComponent},
     {path: 'profile', component: ProfileComponent},
+    {path: 'about', component: AboutComponent},
     {path: 'friends', component: FriendsComponent},
     {path: 'add-friends', component: AddFriendsComponent},
     {path: 'friend-requests', component: FriendRequestsComponent},
@@ -60,7 +62,8 @@ const routes: Routes = [ // Array of all routes - modify when adding routes //TO
         FriendsComponent,
         AddFriendsComponent,
         FriendRequestsComponent,
-        ChatComponent
+        ChatComponent,
+        AboutComponent
     ],
     imports: [
         BrowserModule,

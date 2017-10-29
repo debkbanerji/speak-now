@@ -188,6 +188,10 @@ export class ChatComponent implements OnInit, OnDestroy {
                 if (component.shouldDeleteOldMessages) {
                     component.deleteOldMessages();
                 }
+                component.isLoading = false;
+                component.recordingStartTime = null;
+                component.recordingTimeText = null;
+                audioBlob = null;
             });
         } else {
             this.recordingTimeText = 'No audio to send';

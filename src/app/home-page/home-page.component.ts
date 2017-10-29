@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../providers/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-home-page',
@@ -11,11 +12,10 @@ export class HomePageComponent implements OnInit {
     public displayName: string;
     public LOGO_URL: string;
 
-    constructor(public authService: AuthService) {
+    constructor(public authService: AuthService, private router: Router) {
     }
 
     ngOnInit() {
-        // TODO: Replace
         this.LOGO_URL = '/assets/images/logo.png';
         this.authService.afAuth.auth.onAuthStateChanged((auth) => {
             if (auth != null) {
@@ -23,5 +23,10 @@ export class HomePageComponent implements OnInit {
             }
         });
     }
+
+    public openAboutPage() {
+        console.log('yoo');
+        this.router.navigate(['about']);
+    };
 
 }

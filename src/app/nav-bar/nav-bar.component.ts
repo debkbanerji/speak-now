@@ -38,6 +38,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 text: 'Profile'
             },
             {
+                route: 'about',
+                text: 'About'
+            },
+            {
                 route: 'logout', // Not actual route - caught by 'navigateTo' function
                 text: 'Sign Out'
             }
