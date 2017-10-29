@@ -35,10 +35,12 @@ audioInterface.initialize = function () {
             // Error callback
             function (err) {
                 console.log('The following gUM error occured: ' + err);
+                alert('Unable to record audio due to insufficient permissions. In order to post, try granting this page sufficient permissions or accessing the application over https');
             }
         );
     } else {
         console.log('getUserMedia not supported on your browser!');
+        alert('Media recording not supported on this browser. Try using a supported browser, such as Chrome.')
     }
 };
 

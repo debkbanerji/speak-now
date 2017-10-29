@@ -129,14 +129,14 @@ export class AddFriendsComponent implements OnInit, OnDestroy {
         chatKey = this.db.list('/chats').push({
             uid1: uid1,
             uid2: uid2,
-            messages: {
-                message1: {
-                    'post-time': currDate.getTime(),
-                    'poster-display-name': 'Bot',
-                    'text': 'You can send messages now, but your friend won\'t be able to see' +
-                    ' your messages before accepting your friend request'
-                }
-            }
+            // messages: {
+            //     message1: {
+            //         'post-time': currDate.getTime(),
+            //         'poster-display-name': 'Bot',
+            //         'text': 'You can send messages now, but your friend won\'t be able to see' +
+            //         ' your messages before accepting your friend request'
+            //     }
+            // }
         }).key;
         return chatKey;
     }
