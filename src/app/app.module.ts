@@ -27,7 +27,6 @@ import 'hammerjs';
 import {AppComponent} from './app.component';
 import {AuthService} from './providers/auth.service';
 import {LoginPageComponent} from './login-page/login-page.component';
-import {HomePageComponent} from './home-page/home-page.component';
 import {config} from './config/firebase-config';
 import {NavBarComponent} from './nav-bar/nav-bar.component';
 import {PostsComponent} from './posts/posts.component';
@@ -40,9 +39,8 @@ import {CdkTableModule} from '@angular/cdk';
 import {AboutComponent} from './about/about.component';
 
 const routes: Routes = [ // Array of all routes - modify when adding routes //TODO: Replace
-    {path: '', component: HomePageComponent}, // Default route
+    {path: '', component: PostsComponent}, // Default route
     {path: 'login', component: LoginPageComponent},
-    {path: 'posts', component: PostsComponent},
     {path: 'profile', component: ProfileComponent},
     {path: 'about', component: AboutComponent},
     {path: 'friends', component: FriendsComponent},
@@ -55,7 +53,6 @@ const routes: Routes = [ // Array of all routes - modify when adding routes //TO
     declarations: [
         AppComponent,
         LoginPageComponent,
-        HomePageComponent,
         NavBarComponent,
         PostsComponent,
         ProfileComponent,

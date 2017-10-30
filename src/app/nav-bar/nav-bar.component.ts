@@ -26,10 +26,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 text: 'Home'
             },
             {
-                route: 'posts',
-                text: 'Posts'
-            },
-            {
                 route: 'friends',
                 text: 'Friends'
             },
