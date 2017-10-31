@@ -14,12 +14,12 @@ import {Subscription} from 'rxjs/Subscription';
 export class LoginPageComponent implements OnInit, OnDestroy {
     private userDataSubscription: Subscription;
     public LOGO_URL: string;
+    public showAbout: boolean;
 
     constructor(public authService: AuthService, private db: AngularFireDatabase, private router: Router, private ngZone: NgZone) {
     }
 
     ngOnInit() {
-        // TODO: Replace
         this.LOGO_URL = '/assets/images/logo.png';
     }
 
