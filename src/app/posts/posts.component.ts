@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, ApplicationRef} from '@angular/core';
 import {NgForm} from '@angular/forms';
 
 import {AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable} from 'angularfire2/database';
@@ -36,6 +36,8 @@ export class PostsComponent implements OnInit, OnDestroy {
     public recordingStartTime: Date;
     public recordingTimeText: string;
     public isLoading = false;
+    public canRecord = true;
+    public cantRecordText: string;
 
     formatDate(millis) {
         const date = new Date(millis);
@@ -43,11 +45,11 @@ export class PostsComponent implements OnInit, OnDestroy {
         return date.toLocaleString();
     }
 
-    constructor(public authService: AuthService, private db: AngularFireDatabase) {
+    constructor(public authService: AuthService, private db: AngularFireDatabase, private apRef: ApplicationRef) {
     }
 
     ngOnInit() {
-        audioInterface.initialize();
+        // audioInterface.initialize();
         this.submitText = '';
         this.feedLocation = '/posts';
         this.numPostsObject = this.db.object(this.feedLocation + '/num-posts');
@@ -116,10 +118,20 @@ export class PostsComponent implements OnInit, OnDestroy {
     }
 
     public startRecoding() {
-        audioInterface.startRecording();
-        this.recordingTimeText = null;
-        this.isRecording = true;
-        this.recordingStartTime = new Date();
+        const component = this;
+        const successCallback = function () {
+            component.recordingStartTime = new Date();
+            component.recordingTimeText = null;
+            component.isRecording = true;
+            component.apRef.tick();
+        };
+        const errorCallback = function (errorMessage) {
+            component.canRecord = false;
+            component.cantRecordText = errorMessage;
+            component.apRef.tick();
+        };
+        audioInterface.initialize(successCallback, errorCallback);
+        // audioInterface.startRecording();
     }
 
     public finishRecording() {

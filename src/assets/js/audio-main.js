@@ -7,7 +7,7 @@ let recorder = null;
 
 let audioInterface = {};
 
-audioInterface.initialize = function () {
+audioInterface.initialize = function (successCallback, errorCallback) {
     // audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     // gainNode = audioCtx.createGain();
     audioBlob = null;
@@ -26,6 +26,12 @@ audioInterface.initialize = function () {
 
                 recorder = new WebAudioRecorder(gainNode, {});
 
+                recorder.startRecording();
+
+                if (successCallback) {
+                    successCallback();
+                }
+
                 recorder.onComplete = function (recorder, blob) {
                     audioBlob = blob;
                 };
@@ -35,12 +41,20 @@ audioInterface.initialize = function () {
             // Error callback
             function (err) {
                 console.log('The following gUM error occured: ' + err);
-                alert('Unable to record audio due to insufficient permissions. In order to post, try granting this page sufficient permissions or accessing the application over https');
+                errorCallback('Unable to record audio due to insufficient permissions. In order to post, try granting this page microphone permissions or accessing the application over https');
+                // console.log(errorCallback);
+
+                // if (errorCallback) {
+                //     errorCallback();
+                // }
             }
         );
     } else {
+        // if (errorCallback) {
+        //     errorCallback();
+        // }
         console.log('getUserMedia not supported on your browser!');
-        alert('Media recording not supported on this browser. Try using a supported browser, such as Chrome.')
+        errorCallback('Media recording not supported on this browser. Try using a supported browser, such as Chrome.')
     }
 };
 

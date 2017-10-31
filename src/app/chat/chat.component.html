@@ -47,7 +47,12 @@
             <div class="panel" [hidden]="!isLoading">
                 <h2>Uploading...</h2>
             </div>
-            <div class="panel" [hidden]="isLoading">
+            <div class="panel" [hidden]="canRecord">
+                <h5>
+                    {{cantRecordText}}
+                </h5>
+            </div>
+            <div class="panel" [hidden]="isLoading || !canRecord">
                 <form #f="ngForm" novalidate>
                     <!--<div class="form-group">-->
                     <div class="input-group">

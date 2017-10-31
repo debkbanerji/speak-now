@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2/database';
 import {Subscription} from 'rxjs/Subscription';
@@ -45,6 +45,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     public recordingStartTime: Date;
     public recordingTimeText: string;
     public isLoading = false;
+    public canRecord = true;
+    public cantRecordText: string;
 
     formatTimeStamp(millis) {
         const date = new Date(millis);
@@ -52,7 +54,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         return date.toLocaleString();
     }
 
-    constructor(public authService: AuthService, private db: AngularFireDatabase, private route: ActivatedRoute) {
+    constructor(public authService: AuthService, private db: AngularFireDatabase, private route: ActivatedRoute, private apRef: ApplicationRef) {
     }
 
     formatDate(millis) {
@@ -62,7 +64,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        audioInterface.initialize();
+        // audioInterface.initialize();
         this.authService.afAuth.auth.onAuthStateChanged((auth) => {
             if (auth != null) {
                 this.userUID = auth.uid;
@@ -123,10 +125,20 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
 
     public startRecoding() {
-        audioInterface.startRecording();
-        this.recordingTimeText = null;
-        this.isRecording = true;
-        this.recordingStartTime = new Date();
+        const component = this;
+        const successCallback = function () {
+            component.recordingStartTime = new Date();
+            component.recordingTimeText = null;
+            component.isRecording = true;
+            component.apRef.tick();
+        };
+        const errorCallback = function (errorMessage) {
+            component.canRecord = false;
+            component.cantRecordText = errorMessage;
+            component.apRef.tick();
+        };
+        audioInterface.initialize(successCallback, errorCallback);
+        // audioInterface.startRecording();
     }
 
     public finishRecording() {
