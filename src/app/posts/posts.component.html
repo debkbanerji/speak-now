@@ -13,10 +13,23 @@
                 <form #f="ngForm" novalidate>
                     <!--<div class="form-group">-->
                     <md-input-container>
-                        <input name="title" ngModel mdInput placeholder="Post Title"
+                        <input name="title" ngModel mdInput placeholder="Post Title (Optional)"
                                class="form-control">
                     </md-input-container>
                     <!--<textarea name="text" ngModel placeholder="Post Text" class="form-control"></textarea>-->
+                    <div>
+                        <button md-raised-button class="btn btn-raised btn-custom" *ngIf="!isRecording"
+                                (click)="startRecoding()">Start Recording
+                        </button>
+                        <button md-raised-button class="btn btn-raised btn-custom" *ngIf="isRecording"
+                                (click)="finishRecording()">Stop Recording
+                        </button>
+                        <span *ngIf="isRecording" class="glyphicon glyphicon-record"></span>
+                        <span *ngIf="recordingTimeText">
+                            <b>{{recordingTimeText}}</b>
+                            <br>
+                        </span>
+                    </div>
                     <ng2-file-input><!--(onChange)="onFileChange($event)">-->
                     </ng2-file-input>
                     <div *ngIf="fileInputComponent.currentFiles.length > 0">
@@ -25,31 +38,19 @@
                         </button>
                         <b>{{fileInputComponent.currentFiles[0].name}}</b>
                     </div>
-                    <button md-raised-button class="btn btn-raised btn-custom" *ngIf="!isRecording"
-                            (click)="startRecoding()">Start Recording
-                    </button>
-                    <button md-raised-button class="btn btn-raised btn-custom" *ngIf="isRecording"
-                            (click)="finishRecording()">Stop Recording
-                    </button>
-                    <span *ngIf="isRecording" class="glyphicon glyphicon-record"></span>
-                    <br>
-                    <span *ngIf="recordingTimeText">
-                        <b>{{recordingTimeText}}</b>
-                        <br>
-                    </span>
+
                     <button md-raised-button class="btn btn-raised btn-custom" (click)="onSubmit(f)"
                             *ngIf="!isRecording">Make New Post
                     </button>
                     <!--</div>-->
                 </form>
-                <br>
                 <b>{{submitText}}</b>
             </div>
             <div *ngFor="let post of postsArray | async | orderBy: 'datetime' | reverse">
                 <div class="panel">
                     <!--For previewing data as JSON-->
                     <!--{{post | json}}-->
-                    <h3>{{post['title']}}</h3>
+                    <h4>{{post['title']}}</h4>
                     <img src="{{post['image-url']}}" *ngIf="post['image-url']" class="img-responsive panel">
                     <audio controls *ngIf="post['audio-url']">
                         <source src="{{post['audio-url']}}" type="audio/wav">

@@ -150,7 +150,7 @@ export class PostsComponent implements OnInit, OnDestroy {
 
     public onSubmit(form: NgForm) {
         if (audioBlob == null) {
-            this.submitText = 'Please record audio';
+            this.submitText = 'Please record audio to post';
 
         } else if (form.valid) {
             this.isLoading = true;
