@@ -253,8 +253,12 @@ export class PostsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.lastKeySubscription.unsubscribe();
-        this.postsArraySubscription.unsubscribe();
+        if (this.lastKeySubscription) {
+            this.lastKeySubscription.unsubscribe();
+        }
+        if (this.postsArraySubscription) {
+            this.postsArraySubscription.unsubscribe();
+        }
         // window.onscroll = () => {
         //     // Clearing onscroll implementation (may not be necessary)
         // };
