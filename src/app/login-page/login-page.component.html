@@ -3,8 +3,8 @@
         <div class="container-fluid" style="text-align: center">
             <div class="panel">
                 <!--TODO: Replace-->
-                <img src="{{LOGO_URL}}" class="logo-large"/>
-                <h1>Speak Now</h1>
+                <img src="{{LOGO_URL}}" class="logo-large" alt="Speak Now"/>
+                <br>
                 <button md-raised-button class="btn btn-raised btn-custom" (click)="loginWithGoogle()">Login
                 </button>
                 <br>
@@ -16,6 +16,7 @@
                 <h3><em>Speak Now</em> is a social network which is centered around sound rather than text</h3>
                 <p>Idea by Griffin Dufek</p>
                 <p><em>Speak Now</em> is <a href="https://github.com/debkbanerji/speak-now">Open Source</a></p>
+                <p>v2017.10.30</p>
             </div>
             <div [hidden]="!showAbout" class="panel">
                 <div class="well" style="display: inline-block">
