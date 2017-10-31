@@ -12,11 +12,10 @@
 
 Speak Now is a social network in which you communicate using your voice rather than text
 
-The name, logo and tagline were ~~stolen from~~ inspired by the Taylor Swift song and album of the same name
+Idea by Griffin Dufek
 
-The idea for the application came from Griffin Dufek (except for the weird name and theme - he doesn't know about that stuff)
+The name, color scheme and tagline were ~~stolen from~~ inspired by the 2010 Taylor Swift song and album of the same name
 
-Made by Deb Banerji
 
 ## Setup
 

@@ -1,17 +1,39 @@
 <div class="row">
     <div class="col-xs-12">
-        <div class="container-fluid">
+        <div class="container-fluid" style="text-align: center">
             <div class="panel">
                 <!--TODO: Replace-->
                 <img src="{{LOGO_URL}}" class="logo-large"/>
                 <h1>Speak Now</h1>
-                <h4><em>Speak Now</em> is a social network which is centered around sound rather than text</h4>
+                <button md-raised-button class="btn btn-raised btn-custom" (click)="loginWithGoogle()">Login
+                </button>
+                <br>
+                <button md-raised-button class="btn btn-raised btn-custom" *ngIf="!showAbout"
+                        (click)="showAbout = true">Learn More
+                </button>
+            </div>
+            <div [hidden]="!showAbout" class="panel">
+                <h3><em>Speak Now</em> is a social network which is centered around sound rather than text</h3>
+                <p>Idea by Griffin Dufek</p>
+                <p><em>Speak Now</em> is <a href="https://github.com/debkbanerji/speak-now">Open Source</a></p>
+            </div>
+            <div [hidden]="!showAbout" class="panel">
                 <div class="well" style="display: inline-block">
-                    <p>I am not the kind of app<br>That could be just as cool as Facebook on every occasion<br>But you
-                        are not the kind of boy<br>Who should be using only cool apps</p>
+                    <span>I am not the kind of app<br>That could be just as cool as Facebook on every occasion<br>But you
+                        are not the kind of boy<br>Who should be using only cool apps</span>
+                    <br>
                 </div>
                 <br>
-                <button md-raised-button class="btn btn-raised btn-custom" (click)="loginWithGoogle()">Login
+                <p>The name, color scheme and tagline were
+                    <del>stolen from</del>
+                    inspired by the 2010 Taylor Swift song and album of the same name
+                </p>
+                <iframe
+                    src="https://open.spotify.com/embed?uri=spotify:track:24DefNCFiWTP8OjYWiXuYe&theme=white"
+                    width="300" height="100" frameborder="0" allowtransparency="true"></iframe>
+                <br>
+                <button md-raised-button class="btn btn-raised btn-custom" *ngIf="showAbout"
+                        (click)="showAbout = false">Collapse
                 </button>
             </div>
         </div>
