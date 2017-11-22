@@ -21,6 +21,12 @@
                         <input name="title" ngModel mdInput placeholder="Post Title (Optional)"
                                class="form-control">
                     </md-input-container>
+                    <br>
+                    <md-input-container>
+                        <input name="spotifyLink" [(ngModel)]="spotifyLink" mdInput placeholder="Spotify Link (Optional)"
+                               class="form-control">
+                    </md-input-container>
+                    <p>Song ID: {{(spotifyLink | spotify) || 'No song found'}}</p>
                     <!--<textarea name="text" ngModel placeholder="Post Text" class="form-control"></textarea>-->
                     <div>
                         <button md-raised-button class="btn btn-raised btn-custom" *ngIf="!isRecording"
@@ -61,6 +67,10 @@
                         <source src="{{post['audio-url']}}" type="audio/wav">
                         Your browser does not support the audio element.
                     </audio>
+                    <div *ngIf="post['spotify-song-id']">
+                        <iframe [src]="getSpotifyEmbedLink(post['spotify-song-id'])"
+                                width="300" height="100" frameborder="0" allowtransparency="true"></iframe>
+                    </div>
                     <p *ngIf="post['text']">{{post['text']}}</p>
                     <p>Posted by {{post['poster-display-name']}} on <b>{{formatDate(post['datetime'])}}</b></p>
                     <!--Users can only delete posts that they have made-->

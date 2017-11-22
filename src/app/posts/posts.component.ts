@@ -8,8 +8,10 @@ import {AuthService} from '../providers/auth.service';
 import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Ng2FileInputComponent} from 'ng2-file-input';
+import {SpotifyPipe} from '../pipes/spotify.pipe';
+import {DomSanitizer} from '@angular/platform-browser';
 
-declare let audioInterface: any;
+declare const audioInterface: any;
 declare let audioBlob: any;
 
 @Component({
@@ -38,6 +40,7 @@ export class PostsComponent implements OnInit, OnDestroy {
     public isLoading = false;
     public canRecord = true;
     public cantRecordText: string;
+    public spotifyLink: string;
 
     formatDate(millis) {
         const date = new Date(millis);
@@ -45,7 +48,10 @@ export class PostsComponent implements OnInit, OnDestroy {
         return date.toLocaleString();
     }
 
-    constructor(public authService: AuthService, private db: AngularFireDatabase, private apRef: ApplicationRef) {
+    constructor(public authService: AuthService,
+                private db: AngularFireDatabase,
+                private apRef: ApplicationRef,
+                private sanitizer: DomSanitizer) {
     }
 
     ngOnInit() {
@@ -161,9 +167,9 @@ export class PostsComponent implements OnInit, OnDestroy {
     }
 
     public onSubmit(form: NgForm) {
+        const songId = new SpotifyPipe().transform(this.spotifyLink);
         if (audioBlob == null) {
             this.submitText = 'Please record audio to post';
-
         } else if (form.valid) {
             this.isLoading = true;
             let currDate: Date;
@@ -185,6 +191,7 @@ export class PostsComponent implements OnInit, OnDestroy {
                     'title': form.value.title,
                     // 'text': form.value.text,
                     'audio-url': audioURL,
+                    'spotify-song-id': songId,
                     // 'audio-text': component.recordingTimeText,
                     'poster-display-name': component.userDisplayName,
                     'poster-uid': component.userUID,
@@ -262,6 +269,10 @@ export class PostsComponent implements OnInit, OnDestroy {
         this.numPostsObject.$ref.transaction(data => {
             return data - 1;
         });
+    }
+
+    public getSpotifyEmbedLink(songId) {
+        return this.sanitizer.bypassSecurityTrustResourceUrl('https://open.spotify.com/embed?uri=spotify:track:' + songId + '&theme=white');
     }
 
     ngOnDestroy() {
