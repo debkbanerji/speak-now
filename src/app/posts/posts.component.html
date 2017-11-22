@@ -26,7 +26,11 @@
                         <input name="spotifyLink" [(ngModel)]="spotifyLink" mdInput placeholder="Spotify Link (Optional)"
                                class="form-control">
                     </md-input-container>
-                    <p>Song ID: {{(spotifyLink | spotify) || 'No song found'}}</p>
+                    <!--<p>Song ID: {{(spotifyLink | spotify) || 'No song found'}}</p>-->
+                    <div *ngIf="(spotifyLink | spotify)">
+                        <iframe [src]="((spotifyLink | spotify) | spotifyLink)"
+                                width="300" height="100" frameborder="0" allowtransparency="true"></iframe>
+                    </div>
                     <!--<textarea name="text" ngModel placeholder="Post Text" class="form-control"></textarea>-->
                     <div>
                         <button md-raised-button class="btn btn-raised btn-custom" *ngIf="!isRecording"
@@ -68,7 +72,7 @@
                         Your browser does not support the audio element.
                     </audio>
                     <div *ngIf="post['spotify-song-id']">
-                        <iframe [src]="getSpotifyEmbedLink(post['spotify-song-id'])"
+                        <iframe [src]="(post['spotify-song-id'] | spotifyLink)"
                                 width="300" height="100" frameborder="0" allowtransparency="true"></iframe>
                     </div>
                     <p *ngIf="post['text']">{{post['text']}}</p>

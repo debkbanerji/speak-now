@@ -38,6 +38,7 @@ import {ChatComponent} from './chat/chat.component';
 import {CdkTableModule} from '@angular/cdk';
 import {AboutComponent} from './about/about.component';
 import {SpotifyPipe} from './pipes/spotify.pipe';
+import { SpotifyLinkPipe } from './pipes/spotify-link.pipe';
 
 const routes: Routes = [ // Array of all routes - modify when adding routes //TODO: Replace
     {path: '', component: PostsComponent}, // Default route
@@ -62,7 +63,8 @@ const routes: Routes = [ // Array of all routes - modify when adding routes //TO
         FriendRequestsComponent,
         ChatComponent,
         AboutComponent,
-        SpotifyPipe
+        SpotifyPipe,
+        SpotifyLinkPipe
     ],
     imports: [
         BrowserModule,

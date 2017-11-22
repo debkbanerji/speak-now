@@ -9,7 +9,6 @@ import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Ng2FileInputComponent} from 'ng2-file-input';
 import {SpotifyPipe} from '../pipes/spotify.pipe';
-import {DomSanitizer} from '@angular/platform-browser';
 
 declare const audioInterface: any;
 declare let audioBlob: any;
@@ -50,8 +49,7 @@ export class PostsComponent implements OnInit, OnDestroy {
 
     constructor(public authService: AuthService,
                 private db: AngularFireDatabase,
-                private apRef: ApplicationRef,
-                private sanitizer: DomSanitizer) {
+                private apRef: ApplicationRef) {
     }
 
     ngOnInit() {
@@ -277,10 +275,6 @@ export class PostsComponent implements OnInit, OnDestroy {
         this.numPostsObject.$ref.transaction(data => {
             return data - 1;
         });
-    }
-
-    public getSpotifyEmbedLink(songId) {
-        return this.sanitizer.bypassSecurityTrustResourceUrl('https://open.spotify.com/embed?uri=spotify:track:' + songId + '&theme=white');
     }
 
     ngOnDestroy() {
