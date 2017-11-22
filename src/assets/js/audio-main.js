@@ -54,6 +54,9 @@ audioInterface.finishRecording = function () {
 };
 
 audioInterface.isRecording = function () {
+    if (!recorder) {
+        return false;
+    }
     return recorder.isRecording();
 };
 

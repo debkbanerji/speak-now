@@ -168,8 +168,10 @@ export class PostsComponent implements OnInit, OnDestroy {
 
     public onSubmit(form: NgForm) {
         const songId = new SpotifyPipe().transform(this.spotifyLink);
-        if (audioBlob == null) {
-            this.submitText = 'Please record audio to post';
+        if (audioBlob == null && songId == null) {
+            this.submitText = 'Please record audio or add valid Spotify Link to post';
+        } else if (form.value.title && form.value.title.length > 100) {
+            this.submitText = 'The post title must be less than 100 characters long';
         } else if (form.valid) {
             this.isLoading = true;
             let currDate: Date;
@@ -184,47 +186,53 @@ export class PostsComponent implements OnInit, OnDestroy {
             if (audioInterface.isRecording()) {
                 component.finishRecording();
             }
-            audioRef.put(audioBlob).then(function (snapshot) {
-                const audioURL = snapshot.downloadURL;
+            if (audioBlob != null) {
+                audioRef.put(audioBlob).then(function (snapshot) {
+                    const audioURL = snapshot.downloadURL;
 
-                const post = {
-                    'title': form.value.title,
-                    // 'text': form.value.text,
-                    'audio-url': audioURL,
-                    'spotify-song-id': songId,
-                    // 'audio-text': component.recordingTimeText,
-                    'poster-display-name': component.userDisplayName,
-                    'poster-uid': component.userUID,
-                    'datetime': timestamp
-                };
+                    component.submitPost(form, audioURL, songId, component, timestamp);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            } else {
+                component.submitPost(form, null, songId, component, timestamp);
+            }
+        } else {
+            this.submitText = 'Please fill out the required data';
+        }
+    }
 
-                if (component.fileInputComponent.currentFiles.length > 0) {
-                    const image = component.fileInputComponent.currentFiles[0]; // Input is limited to one file - can be changed in view
-                    const imageRef = firebase.storage().ref().child('/users/' + component.userUID + '/' + timestamp);
-                    // Unique path as one user cannot upload multiple files at the exact same time
+    private submitPost(form: NgForm, audioURL: string, songId: any, component: PostsComponent, timestamp: number) {
+        const post = {
+            'title': form.value.title,
+            // 'text': form.value.text,
+            'audio-url': audioURL,
+            'spotify-song-id': songId,
+            // 'audio-text': component.recordingTimeText,
+            'poster-display-name': component.userDisplayName,
+            'poster-uid': component.userUID,
+            'datetime': timestamp
+        };
 
-                    imageRef.put(image).then(function (imageSnapshot) {
-                        // Remove image from form
-                        component.removeImage(image);
-                        // Add image URL, then push post
-                        post['image-url'] = imageSnapshot.downloadURL;
-                        component.postsArray.push(post);
-                        component.onPostSuccess(form);
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
-                } else {
-                    // Push without uploading image
-                    component.postsArray.push(post);
-                    component.onPostSuccess(form);
-                }
+        if (component.fileInputComponent.currentFiles.length > 0) {
+            const image = component.fileInputComponent.currentFiles[0]; // Input is limited to one file - can be changed in view
+            const imageRef = firebase.storage().ref().child('/users/' + component.userUID + '/' + timestamp);
+            // Unique path as one user cannot upload multiple files at the exact same time
+
+            imageRef.put(image).then(function (imageSnapshot) {
+                // Remove image from form
+                component.removeImage(image);
+                // Add image URL, then push post
+                post['image-url'] = imageSnapshot.downloadURL;
+                component.postsArray.push(post);
+                component.onPostSuccess(form);
             }).catch(function (error) {
                 console.log(error);
             });
-
-
         } else {
-            this.submitText = 'Please fill out the required data';
+            // Push without uploading image
+            component.postsArray.push(post);
+            component.onPostSuccess(form);
         }
     }
 
