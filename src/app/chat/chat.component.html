@@ -37,6 +37,10 @@
                         <div class=timestamp-frame>
                             <b class="message-timestamp">{{formatTimeStamp(message['post-time'])}}</b>
                         </div>
+                        <div *ngIf="message['spotify-song-id']" style="padding-top: 10px">
+                            <iframe [src]="(message['spotify-song-id'] | spotifyLink)"
+                                    width="300" height="100" frameborder="0" allowtransparency="true"></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,11 +80,26 @@
                         </span>
                         <span class="input-group-btn">
                             <button md-raised-button class="btn btn-sm btn-raised btn-custom"
-                                    (click)="sendMessage(f)"><span class="glyphicon glyphicon-send"></span>
+                                    (click)="sendTextMessage(f)"><span class="glyphicon glyphicon-send"></span>
                             </button>
                         </span>
                     </div>
                 </form>
+                <div class="input-group" [hidden]="isLoading">
+                    <md-input-container>
+                        <input name="spotifyLink" [(ngModel)]="spotifyLink" mdInput placeholder="Spotify Link"
+                               class="form-control">
+                    </md-input-container>
+                    <div *ngIf="(spotifyLink | spotify)">
+                        <iframe [src]="((spotifyLink | spotify) | spotifyLink)"
+                                width="300" height="100" frameborder="0" allowtransparency="true"></iframe>
+                    </div>
+                    <span class="input-group-btn" *ngIf="spotifyLink | spotify">
+                            <button md-raised-button class="btn btn-sm btn-raised btn-custom"
+                                    (click)="sendSpotifyMessage(spotifyLink)"><span class="glyphicon glyphicon-send"></span>
+                            </button>
+                    </span>
+                </div>
             </div>
         </div>
     </div>

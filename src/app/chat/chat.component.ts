@@ -7,6 +7,7 @@ import {ActivatedRoute} from '@angular/router';
 import {NgForm} from '@angular/forms';
 
 import * as firebase from 'firebase';
+import {SpotifyPipe} from "../pipes/spotify.pipe";
 
 declare let audioInterface: any;
 declare let audioBlob: any;
@@ -47,6 +48,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     public isLoading = false;
     public canRecord = true;
     public cantRecordText: string;
+
+    public spotifyLink: string;
 
     formatTimeStamp(millis) {
         const date = new Date(millis);
@@ -176,7 +179,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         }
     }
 
-    public sendMessage(form: NgForm): void {
+    public sendTextMessage(form: NgForm): void {
         if (form.valid && audioBlob !== null) {
             const component = this;
             let currDate: Date;
@@ -208,6 +211,33 @@ export class ChatComponent implements OnInit, OnDestroy {
         } else {
             this.recordingTimeText = 'No audio to send';
         }
+    }
+
+    private sendSpotifyMessage(spotifyLink) {
+        const songId = new SpotifyPipe().transform(spotifyLink);
+        const component = this;
+        let currDate: Date;
+        currDate = new Date();
+        currDate.setTime(currDate.getTime() + currDate.getTimezoneOffset() * 60 * 1000);
+        if (audioInterface.isRecording()) {
+            component.finishRecording();
+        }
+        component.messageListArray.push(
+            {
+                'spotify-song-id': songId,
+                'poster-display-name': component.userDisplayName,
+                'poster-uid': component.userUID,
+                'post-time': currDate.getTime() // For internationalization purposes
+            });
+        this.spotifyLink = null;
+
+        if (component.shouldDeleteOldMessages) {
+            component.deleteOldMessages();
+        }
+        component.isLoading = false;
+        component.recordingStartTime = null;
+        component.recordingTimeText = null;
+        audioBlob = null;
     }
 
     private deleteOldMessages() {
